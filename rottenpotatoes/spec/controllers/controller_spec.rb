@@ -29,11 +29,13 @@ describe MoviesController do
     it 'should follow the route to the similar movies by director page' do
  
     end
+  describe 'searching for non  movies' do
     it 'should follow the route to the similar movies by director page' do
  
     end
     it 'should follow the route to the similar movies by director page' do
  
     end
+  end
  end
 end
