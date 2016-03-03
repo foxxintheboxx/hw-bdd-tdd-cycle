@@ -68,7 +68,7 @@ class MoviesController < ApplicationController
   
   def search_directors
     movie = Movie.where(:title => params[:title]).first
-    if movie[:director].length == 0
+    if movie[:director] == nil or movie[:director].length == 0
       redirect_to movies_path
     else
       @movies = Movie.same_director(movie[:director])
