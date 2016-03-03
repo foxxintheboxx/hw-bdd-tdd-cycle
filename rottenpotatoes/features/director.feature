@@ -42,6 +42,11 @@ Scenario: restrict to movies with 'PG' or 'R' ratings
   And I press "Refresh"
   Then I should see: PG, R
 
+Scenario: restrict to movies with 'PG-13' or 'G' ratings
+  Given I am on the RottenPotatoes home page
+  When I check the following ratings: PG-13, G
+  And I press "Refresh"
+  Then I should see: PG-13, G
 
 Scenario: all ratings selected
   Given I am on the RottenPotatoes home page
