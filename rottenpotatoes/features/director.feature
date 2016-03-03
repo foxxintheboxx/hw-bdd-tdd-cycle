@@ -64,4 +64,10 @@ Scenario: sort movies in increasing order of release date
   When I follow "Release Date"
   Then I should see Star Wars before Blade Runner
   # your steps here
+
+Scenario: add movie
+  Given I am on the RottenPotatoes home page
+  When I follow "Add new movie"
+  And I press "Save Changes"
+  Then I should be on the RottenPotatoes home page
   
