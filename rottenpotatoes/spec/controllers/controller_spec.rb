@@ -1,5 +1,4 @@
 require 'rails_helper'
-require_relative '../app/controllers/movies_controller.rb'
 
 
 
