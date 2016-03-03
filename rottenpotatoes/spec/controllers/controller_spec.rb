@@ -20,9 +20,7 @@ require_relative '../app/controllers/movies_controller.rb'
 
 describe MoviesController do
   describe 'searching for similar movies' do
-    before :each do 
-      @fake_movie = Movie.create(:id => "1", :title => "Star Wars", :director => "George Lucas") 
-    end
+
     it 'should follow the route to the similar movies by director page' do
  
     end
