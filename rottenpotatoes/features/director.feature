@@ -33,3 +33,31 @@ Scenario: can't find similar movies if we don't know director (sad path)
   When  I follow "Find Movies With Same Director"
   Then  I should be on the home page
   And   I should see "'Alien' has no director info"
+  
+  Feature: display list of movies filtered by MPAA rating
+ 
+  As a concerned parent
+  So that I can quickly browse movies appropriate for my family
+  I want to see movies matching only certain MPAA ratings
+
+
+Scenario: restrict to movies with 'PG' or 'R' ratings
+  When I check the following ratings: PG, R
+  And I press "Refresh"
+  Then I should see: PG, R
+  And I should not see: G, PG-13
+
+
+Scenario: all ratings selected
+  When I check all the ratings
+  And I press "Refresh"
+  Then I should see all the movies
+
+Scenario: sort movies alphabetically
+  When I follow "Movie Title"
+  Then I should see Chocolat before Raiders of the Lost Ark
+
+Scenario: sort movies in increasing order of release date
+  When I follow "Release Date"
+  Then I should see The Incredibles before The Help
+  # your steps here
