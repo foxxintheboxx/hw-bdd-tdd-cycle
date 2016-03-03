@@ -39,7 +39,7 @@ class MoviesController < ApplicationController
     end
     @movies = Movie.where(rating: @selected_ratings.keys).order(ordering)
     @movies.each do |movie|
-      if movie.director.length == 0
+      if movie.director == nil or movie.director.length == 0
         movie.director = "\'" + movie.title + "\'" + " has no director info"
       end
     end
