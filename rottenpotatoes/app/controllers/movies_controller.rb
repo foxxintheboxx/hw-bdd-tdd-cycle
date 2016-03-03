@@ -1,12 +1,19 @@
 class MoviesController < ApplicationController
   
   def movie_params
-    params.require(:movie).permit(:title, :rating, :description, :release_date)
+    params.require(:movie).permit(:title, :rating, :description, 
+                                  :release_date, :director)
   end
 
   def show
     id = params[:id] # retrieve movie ID from URI route
-    @movie = Movie.find(id) # look up movie by unique ID
+    movie = Movie.find(id) # look up movie by unique ID
+    # if movie.has_key?(:director)
+    @director = movie[:director]
+    # else
+    #   @director = ""
+    # end
+    @movie = movie
     # will render app/views/movies/show.<extension> by default
   end
 
@@ -31,6 +38,11 @@ class MoviesController < ApplicationController
       redirect_to :sort => sort, :ratings => @selected_ratings and return
     end
     @movies = Movie.where(rating: @selected_ratings.keys).order(ordering)
+    @movies.each do |movie|
+      if movie.director.length == 0
+        movie.director = "\'" + movie.title + "\'" + " has no director info"
+      end
+    end
   end
 
   def new
@@ -52,6 +64,15 @@ class MoviesController < ApplicationController
     @movie.update_attributes!(movie_params)
     flash[:notice] = "#{@movie.title} was successfully updated."
     redirect_to movie_path(@movie)
+  end
+  
+  def search_directors
+    movie = Movie.where(:title => params[:title]).first
+    if movie[:director].length == 0
+      redirect_to movies_path
+    else
+      @movies = Movie.same_director(movie[:director])
+    end
   end
 
   def destroy
