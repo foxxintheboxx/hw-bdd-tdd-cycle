@@ -14,3 +14,87 @@ Then /the director of "(.*)" should be "(.*)"/ do |movie, director|
       fail
     end
 end
+
+
+
+
+
+# Make it easier to express checking or unchecking several boxes at once
+#  "When I uncheck the following ratings: PG, G, R"
+#  "When I check the following ratings: G"
+
+When /^(?:|I )check "([^"]*)"$/ do |field|
+  check(field)
+end
+
+When /^(?:|I )uncheck "([^"]*)"$/ do |field|
+  uncheck(field)
+end
+
+When /I check all the ratings/ do
+  Movie.all.each do |movie|
+    rating = "ratings_" + movie[:rating]
+    check(rating)
+  end
+end
+
+When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
+  # HINT: use String#split to split up the rating_list, then
+  #   iterate over the ratings and reuse the "When I check..." or
+  #   "When I uncheck..." steps in lines 89-95 of web_steps.rb
+  rating_list.gsub(/\s+/, "")
+  rating_list = rating_list.split(",")
+  ["G", "PG", "PG-13", "R"].each do |rating|
+    rating_id = "ratings_" + rating 
+    if rating_list.include?(rating)
+      if uncheck
+        uncheck(rating_id)
+      else
+        check(rating_id)
+      end
+    else
+      if uncheck
+        check(rating_id)
+      else
+        uncheck(rating_id)
+      end
+    end
+  end
+end
+
+Then /I should not see: (.*)$/ do |string|
+  # Make sure that all the movies in the app are visible in the table
+  string.gsub(/\s+/, "")
+  string.split(",").each do |text|
+    within('table#movies tbody') do
+      expect(page).to have_no_content(text)
+    end
+  end
+end
+
+Then /I should see: (.*)$/ do |string|
+  # Make sure that all the movies in the app are visible in the table
+  string.gsub(/\s+/, "")
+  string.split(",").each do |text|
+    within('table#movies tbody') do
+      expect(page).to have_content(text)
+    end
+  end
+end
+
+Then /I should see all the movies/ do
+  # Make sure that all the movies in the app are visible in the table
+  actual_number = page.all('#movies tbody tr').size
+  value = Movie.all.length
+  within('table#movies tbody') do
+      expect(page).to have_xpath(".//tr", :count => value)
+  end
+end
+
+
+Then /I should see (.*) before (.*)/ do |first, next_|
+  html = page.body
+  if html.index(first) > html.index(next_)
+    fail("out of order")
+  end
+end

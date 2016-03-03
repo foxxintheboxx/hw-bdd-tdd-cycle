@@ -34,30 +34,28 @@ Scenario: can't find similar movies if we don't know director (sad path)
   Then  I should be on the home page
   And   I should see "'Alien' has no director info"
   
-  Feature: display list of movies filtered by MPAA rating
- 
-  As a concerned parent
-  So that I can quickly browse movies appropriate for my family
-  I want to see movies matching only certain MPAA ratings
 
 
 Scenario: restrict to movies with 'PG' or 'R' ratings
+  Given I am on the RottenPotatoes home page
   When I check the following ratings: PG, R
   And I press "Refresh"
   Then I should see: PG, R
-  And I should not see: G, PG-13
 
 
 Scenario: all ratings selected
+  Given I am on the RottenPotatoes home page
   When I check all the ratings
   And I press "Refresh"
   Then I should see all the movies
 
 Scenario: sort movies alphabetically
+  Given I am on the RottenPotatoes home page
   When I follow "Movie Title"
-  Then I should see Chocolat before Raiders of the Lost Ark
+  Then I should see Alien before Blade Runner
 
 Scenario: sort movies in increasing order of release date
+  Given I am on the RottenPotatoes home page
   When I follow "Release Date"
-  Then I should see The Incredibles before The Help
+  Then I should see Star Wars before Blade Runner
   # your steps here
